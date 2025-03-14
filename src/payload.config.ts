@@ -13,6 +13,7 @@ import {Profiles} from './collections/Profiles'
 import { Conversations } from './collections/Converations'
 import { Messages } from './collections/Messages'
 import { Doctors } from './collections/Doctors'
+import { MedicalRecord } from'./collections/MedicalRecord'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -29,7 +30,7 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Conversations, Messages, Media,Profiles,Doctors],
+  collections: [Users, Conversations, Messages, Media,Profiles,Doctors,MedicalRecord],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

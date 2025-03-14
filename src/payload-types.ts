@@ -72,6 +72,7 @@ export interface Config {
     media: Media;
     profiles: Profile;
     doctors: Doctor;
+    'medical-records': MedicalRecord;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -88,6 +89,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     profiles: ProfilesSelect<false> | ProfilesSelect<true>;
     doctors: DoctorsSelect<false> | DoctorsSelect<true>;
+    'medical-records': MedicalRecordsSelect<false> | MedicalRecordsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -262,6 +264,57 @@ export interface Message {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "medical-records".
+ */
+export interface MedicalRecord {
+  id: string;
+  user: string | User;
+  /**
+   * Tiền sử bệnh án của bệnh nhân, vui lòng chọn các mục phù hợp
+   */
+  medicalHistory?: {
+    chronicDiseases?:
+      | {
+          disease?:
+            | (
+                | 'heart'
+                | 'high_blood_pressure'
+                | 'diabetes'
+                | 'asthma'
+                | 'cancer'
+                | 'arthritis'
+                | 'osteoporosis'
+                | 'kidney_disease'
+                | 'liver_disease'
+                | 'digestive_disorder'
+                | 'neurological_disorder'
+              )
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    allergies?:
+      | {
+          allergy?: ('food' | 'medicine' | 'pollen' | 'animal_hair' | 'environment') | null;
+          id?: string | null;
+        }[]
+      | null;
+    surgeries?:
+      | {
+          surgery?:
+            | ('appendectomy' | 'heart_surgery' | 'joint_surgery' | 'stomach_surgery' | 'cesarean_section')
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    otherConditions?: string | null;
+  };
+  examinationDate: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -290,6 +343,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'doctors';
         value: string | Doctor;
+      } | null)
+    | ({
+        relationTo: 'medical-records';
+        value: string | MedicalRecord;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -460,6 +517,39 @@ export interface DoctorsSelect<T extends boolean = true> {
   phone?: T;
   location?: T;
   bio?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "medical-records_select".
+ */
+export interface MedicalRecordsSelect<T extends boolean = true> {
+  user?: T;
+  medicalHistory?:
+    | T
+    | {
+        chronicDiseases?:
+          | T
+          | {
+              disease?: T;
+              id?: T;
+            };
+        allergies?:
+          | T
+          | {
+              allergy?: T;
+              id?: T;
+            };
+        surgeries?:
+          | T
+          | {
+              surgery?: T;
+              id?: T;
+            };
+        otherConditions?: T;
+      };
+  examinationDate?: T;
   updatedAt?: T;
   createdAt?: T;
 }
